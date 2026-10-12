@@ -14,21 +14,17 @@
     --bg: #f2eee3;
     --fg: #161514;
     --muted: #57534b;
-    --red: #cf2a1e;
-    --blue: #1c4c9e;
-    --yellow: #eeb20c;
+    --red: #c93a2b;
+    --blue: #27559f;
+    --yellow: #e8b424;
+    --on-red: #fff;
+    --on-blue: #fff;
+    --on-yellow: #161514;
+    --wash-yellow: #f1e3b4;
+    --wash-blue: #d9e1ee;
+    --wash-red: #f0d5cc;
+    color-scheme: light;
     --font: "Jost", Futura, "Century Gothic", "Avenir Next", sans-serif;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #151413;
-      --fg: #f2eee3;
-      --muted: #aaa598;
-      --red: #e5463a;
-      --blue: #6a96e6;
-      --yellow: #f4c22e;
-      color-scheme: dark;
-    }
   }
 
   * { box-sizing: border-box; }
@@ -64,7 +60,11 @@
     font: 600 0.8125rem/1 var(--font); letter-spacing: 0.12em; text-transform: uppercase;
   }
   .top nav { display: flex; flex-wrap: wrap; gap: 22px; }
-  .top a { text-decoration: none; }
+  .top a { text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+  .top nav a::before { content: ""; width: 9px; height: 9px; flex: none; background: var(--fg); }
+  .top nav a[href="#experiencia"]::before { background: var(--red); }
+  .top nav a[href="#habilidades"]::before { background: var(--blue); border-radius: 50%; }
+  .top nav a[href="#educacion"]::before { background: var(--yellow); clip-path: polygon(50% 0, 100% 100%, 0 100%); }
   .top a:hover { color: var(--red); }
   .top .actions { display: flex; gap: 10px; }
   button {
@@ -76,7 +76,11 @@
   #lang:hover { background: var(--red); border-color: var(--red); color: #fff; }
 
   /* Cabecera */
-  header.intro { padding-block: 52px 48px; }
+  header.intro { position: relative; isolation: isolate; padding-block: 52px 48px; }
+  header.intro::before { /* círculo amarillo pálido */
+    content: ""; position: absolute; z-index: -1; right: 0; top: 28px; width: min(260px, 60%); aspect-ratio: 1;
+    border-radius: 50%; background: var(--wash-yellow);
+  }
   .who { display: flex; flex-wrap: wrap; align-items: center; gap: 24px 36px; margin-bottom: 30px; }
   .who > div:not(.figure) { min-width: 0; flex: 1 1 320px; }
   .figure { position: relative; width: 172px; height: 172px; flex: none; }
@@ -87,6 +91,10 @@
     content: ""; position: absolute; right: 0; top: 0; width: 92px; height: 92px; background: var(--yellow);
     clip-path: polygon(0 0, 100% 0, 100% 100%);
   }
+  .figure i { /* cuarto de círculo azul */
+    position: absolute; right: 0; bottom: 0; width: 70px; height: 70px; background: var(--blue);
+    border-radius: 0 0 100% 0;
+  }
   .photo {
     position: absolute; z-index: 1; left: 22px; top: 22px; width: 128px; height: 128px;
     border-radius: 50%; object-fit: cover; border: 4px solid var(--fg);
@@ -96,6 +104,7 @@
     font-size: clamp(2.25rem, 7.2vw, 3.75rem); line-height: 0.95; font-weight: 700; letter-spacing: -0.01em;
     text-transform: uppercase; text-wrap: balance;
   }
+  h1::after { content: ""; display: inline-block; width: 0.2em; height: 0.2em; margin-left: 0.1em; border-radius: 50%; background: var(--red); }
   .role { margin: 0; font: 600 0.875rem/1.5 var(--font); letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue); }
   .summary { margin: 0 0 24px; max-width: 62ch; font-size: 1.125rem; }
   .contact {
@@ -108,34 +117,40 @@
     display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 16px 32px;
     padding-block: 34px;
     border-top: 3px solid var(--fg);
+    --c: var(--fg); --on-c: var(--bg); --wash: transparent;
   }
+  #experiencia { --c: var(--red); --on-c: var(--on-red); --wash: var(--wash-red); }
+  #habilidades { --c: var(--blue); --on-c: var(--on-blue); --wash: var(--wash-blue); }
+  #educacion { --c: var(--yellow); --on-c: var(--on-yellow); --wash: var(--wash-yellow); }
   h2 {
-    display: flex; align-items: center; gap: 10px; align-self: start;
-    margin: 0; padding-top: 4px;
+    display: flex; align-items: center; gap: 10px; align-self: start; justify-self: start;
+    margin: 0; padding: 7px 12px 7px 10px;
+    background: var(--c); color: var(--on-c);
     font: 700 0.8125rem/1.4 var(--font); letter-spacing: 0.14em; text-transform: uppercase;
   }
-  h2::before { content: ""; width: 14px; height: 14px; flex: none; background: var(--red); }
-  #habilidades h2::before { background: var(--blue); border-radius: 50%; }
-  #educacion h2::before { background: var(--yellow); clip-path: polygon(50% 0, 100% 100%, 0 100%); }
-  #proyectos h2::before { background: var(--fg); border-radius: 50% 50% 0 0; }
+  h2::before { content: ""; width: 12px; height: 12px; flex: none; background: var(--on-c); }
+  #habilidades h2::before { border-radius: 50%; }
+  #educacion h2::before { clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+  #proyectos h2::before { border-radius: 50% 50% 0 0; }
 
   .items { display: grid; gap: 28px; min-width: 0; }
   .item h3 { margin: 0; font-size: 1.1875rem; font-weight: 600; line-height: 1.3; }
   .item h3 a { text-decoration: none; }
   .item h3 a::after { content: " ↗"; font-weight: 400; color: var(--red); }
   .head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 2px 16px; }
-  .meta { font: 500 0.8125rem/1.6 var(--font); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .meta { padding: 1px 8px; background: var(--wash); font: 500 0.8125rem/1.6 var(--font); letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg); font-variant-numeric: tabular-nums; white-space: nowrap; }
   .sub { margin: 2px 0 0; color: var(--muted); }
   .item p { margin: 8px 0 0; max-width: 62ch; }
   .item ul { margin: 8px 0 0; padding: 0; list-style: none; max-width: 62ch; }
   .item li { position: relative; margin-top: 6px; padding-left: 20px; }
-  .item li::before { content: ""; position: absolute; left: 0; top: 0.62em; width: 10px; height: 3px; background: var(--fg); }
+  .item li::before { content: ""; position: absolute; left: 0; top: 0.62em; width: 10px; height: 3px; background: var(--c); }
   .stack { margin-top: 8px; font: 500 0.875rem/1.6 var(--font); color: var(--muted); }
   .links { margin-top: 6px; font: 500 0.875rem/1.6 var(--font); display: flex; flex-wrap: wrap; gap: 4px 16px; }
 
   dl.skills { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 10px 16px; margin: 0; }
   dl.skills dt { font: 600 0.8125rem/2.05 var(--font); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
   dl.skills dd { margin: 0; }
+  dl.skills dt { border-left: 3px solid var(--c); padding-left: 10px; }
 
   footer {
     display: flex; align-items: center; gap: 8px;
@@ -146,12 +161,18 @@
   footer i:nth-child(2) { background: var(--blue); border-radius: 50%; }
   footer i:nth-child(3) { background: var(--yellow); clip-path: polygon(50% 0, 100% 100%, 0 100%); margin-right: 8px; }
 
+  body::after {
+    content: ""; display: block; height: 12px; margin: 40px -20px -64px;
+    background: linear-gradient(90deg, var(--blue) 0 18%, var(--yellow) 18% 44%, var(--red) 44%);
+  }
+
   @media (max-width: 640px) {
     header.intro { padding-block: 32px 36px; }
     .figure { width: 132px; height: 132px; }
     .figure::before { width: 84px; height: 84px; }
     .figure::after { width: 70px; height: 70px; }
     .photo { left: 16px; top: 16px; width: 100px; height: 100px; }
+    .figure i { width: 54px; height: 54px; }
     section { grid-template-columns: minmax(0, 1fr); padding-block: 28px; }
     dl.skills { grid-template-columns: minmax(0, 1fr); gap: 0; }
     dl.skills dd { margin-bottom: 10px; }
@@ -163,7 +184,11 @@
     :root { --bg: #fff; --fg: #000; --muted: #444; --red: #000; --blue: #000; --yellow: #000; }
     @page { margin: 14mm; }
     body { padding: 0; font-size: 10pt; line-height: 1.4; }
-    body::before, .top, .links, footer, .figure::before, .figure::after, h2::before { display: none; }
+    body::before, body::after, header.intro::before, .top, .links, footer,
+    .figure::before, .figure::after, .figure i, h1::after, h2::before { display: none; }
+    h2 { background: none; color: #000; padding: 0; }
+    .meta { background: none; padding: 0; }
+    dl.skills dt { border: 0; padding: 0; }
     header.intro { padding-block: 0 12pt; }
     .who { margin-bottom: 10pt; gap: 14pt; }
     .figure { width: 64pt; height: 64pt; }
@@ -197,7 +222,7 @@
 
   <header class="intro">
     <div class="who">
-      <div class="figure"><img class="photo" src="assets/kevin.jpg" width="128" height="128" alt="Foto de Kevin Mondragon Tapia"></div>
+      <div class="figure"><i></i><img class="photo" src="assets/kevin.jpg" width="128" height="128" alt="Foto de Kevin Mondragon Tapia"></div>
       <div>
     <h1>Kevin Mondragon Tapia</h1>
     <p class="role">
