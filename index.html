@@ -23,6 +23,7 @@
     --wash-yellow: #f1e3b4;
     --wash-blue: #d9e1ee;
     --wash-red: #f0d5cc;
+    --cell: #e6dfce;
     color-scheme: light;
     --font: "Jost", Futura, "Century Gothic", "Avenir Next", sans-serif;
   }
@@ -121,6 +122,7 @@
   }
   #experiencia { --c: var(--red); --on-c: var(--on-red); --wash: var(--wash-red); }
   #habilidades { --c: var(--blue); --on-c: var(--on-blue); --wash: var(--wash-blue); }
+  #formacion h2::before { transform: rotate(45deg) scale(0.85); }
   #educacion { --c: var(--yellow); --on-c: var(--on-yellow); --wash: var(--wash-yellow); }
   h2 {
     display: flex; align-items: center; gap: 10px; align-self: start; justify-self: start;
@@ -152,6 +154,31 @@
   dl.skills dd { margin: 0; }
   dl.skills dt { border-left: 3px solid var(--c); padding-left: 10px; }
 
+  code { font: 0.9em ui-monospace, Menlo, Consolas, monospace; background: var(--cell); padding: 1px 5px; }
+
+  /* Educación continua: un calendario de 12 meses por año */
+  .legend {
+    display: flex; flex-wrap: wrap; gap: 6px 20px; margin: 0; padding: 0; list-style: none;
+    font: 500 0.8125rem/1.6 var(--font); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+  }
+  .legend li { display: flex; align-items: center; gap: 8px; }
+  .legend i, .entries i { width: 12px; height: 12px; flex: none; background: var(--k); }
+  .year { display: grid; gap: 12px; min-width: 0; }
+  .year h3 { margin: 0; font-size: 2rem; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+  .months { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 4px; margin: 0; padding: 0; list-style: none; }
+  .months li {
+    display: grid; place-items: center; aspect-ratio: 1; background: var(--cell); color: var(--muted);
+    font: 600 0.75rem/1 var(--font); letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .months li.on { background: var(--k); color: var(--on-k); }
+  .entries { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+  .entries li { display: grid; grid-template-columns: 12px 3.2em minmax(0, 1fr); gap: 10px; align-items: baseline; }
+  .entries i { align-self: center; }
+  .entries .when { font: 600 0.8125rem/1.6 var(--font); letter-spacing: 0.08em; text-transform: uppercase; }
+  .entries b { font-weight: 600; }
+  .entries small { font-size: 1em; color: var(--muted); }
+  .year .none { margin: 0; color: var(--muted); }
+
   footer {
     display: flex; align-items: center; gap: 8px;
     padding-top: 24px; border-top: 3px solid var(--fg);
@@ -176,6 +203,9 @@
     section { grid-template-columns: minmax(0, 1fr); padding-block: 28px; }
     dl.skills { grid-template-columns: minmax(0, 1fr); gap: 0; }
     dl.skills dd { margin-bottom: 10px; }
+    .months { gap: 3px; }
+    .months li { font-size: 0.625rem; letter-spacing: 0; }
+    .months li span { display: none; }
   }
   @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
@@ -187,6 +217,10 @@
     body::before, body::after, header.intro::before, .top, .links, footer,
     .figure::before, .figure::after, .figure i, h1::after, h2::before { display: none; }
     h2 { background: none; color: #000; padding: 0; }
+    .months, .legend, .entries i { display: none; }
+    .entries li { grid-template-columns: 3.2em minmax(0, 1fr); }
+    .year h3 { font-size: 11pt; }
+    code { background: none; padding: 0; }
     .meta { background: none; padding: 0; }
     dl.skills dt { border: 0; padding: 0; }
     header.intro { padding-block: 0 12pt; }
@@ -210,9 +244,11 @@
 
   <div class="top">
     <nav aria-label="Secciones">
+      <a href="#proyectos"><span lang="es">Proyectos</span><span lang="en">Projects</span></a>
       <a href="#experiencia"><span lang="es">Experiencia</span><span lang="en">Experience</span></a>
       <a href="#habilidades"><span lang="es">Habilidades</span><span lang="en">Skills</span></a>
       <a href="#educacion"><span lang="es">Educación</span><span lang="en">Education</span></a>
+      <a href="#formacion"><span lang="es">Educación continua</span><span lang="en">Continuing education</span></a>
     </nav>
     <div class="actions">
       <button type="button" id="print"><span lang="es">Guardar CV en PDF</span><span lang="en">Save CV as PDF</span></button>
@@ -241,6 +277,29 @@
   </header>
 
   <!-- Proyectos: solo se listan los que llevan el prefijo "sideproject" en el nombre. -->
+  <section id="proyectos">
+    <h2><span lang="es">Proyectos</span><span lang="en">Projects</span></h2>
+    <div class="items">
+      <article class="item">
+        <div class="head">
+          <h3><span lang="es">Terrazas de Madrid: de MongoDB a Neo4j</span><span lang="en">Madrid terraces: from MongoDB to Neo4j</span></h3>
+          <span class="meta"><span lang="es">trabajo en equipo · repo privado</span><span lang="en">team project · private repo</span></span>
+        </div>
+        <p class="sub"><span lang="es">Actividad grupal de la Maestría en Big Data, UNIR · oct 2026</span><span lang="en">Group assignment, Master's in Big Data, UNIR · Oct 2026</span></p>
+        <ul lang="es">
+          <li>Importación de datos abiertos de locales y terrazas de Madrid a MongoDB Atlas, con monitorización del replica set mediante <code>mongostat</code> y <code>mongotop</code>.</li>
+          <li>Limpieza de los datos con Python y consultas y actualizaciones en <code>mongosh</code> sobre barrios, horarios y terrazas a inspeccionar.</li>
+          <li>Modelo de grafo en Neo4j cargado con Cypher desde un CSV exportado de MongoDB: 2,999 locales, 120 barrios, 20 distritos y 8 tipos de terraza.</li>
+        </ul>
+        <ul lang="en">
+          <li>Imported Madrid open data on venues and terraces into MongoDB Atlas, monitoring the replica set with <code>mongostat</code> and <code>mongotop</code>.</li>
+          <li>Cleaned the data with Python and wrote <code>mongosh</code> queries and updates on neighbourhoods, opening hours and terraces flagged for inspection.</li>
+          <li>Graph model in Neo4j loaded with Cypher from a CSV exported from MongoDB: 2,999 venues, 120 neighbourhoods, 20 districts and 8 terrace types.</li>
+        </ul>
+        <div class="stack">MongoDB Atlas · mongosh · Python · Neo4j · Cypher</div>
+      </article>
+    </div>
+  </section>
 
   <section id="experiencia">
     <h2><span lang="es">Experiencia</span><span lang="en">Experience</span></h2>
@@ -352,6 +411,18 @@
     </div>
   </section>
 
+  <section id="formacion">
+    <h2><span lang="es">Educación continua</span><span lang="en">Continuing education</span></h2>
+    <div class="items">
+      <ul class="legend">
+        <li style="--k: var(--red)"><i></i><span lang="es">Certificación</span><span lang="en">Certification</span></li>
+        <li style="--k: var(--blue)"><i></i><span lang="es">Curso</span><span lang="en">Course</span></li>
+        <li style="--k: var(--yellow)"><i></i><span lang="es">Programa</span><span lang="en">Program</span></li>
+      </ul>
+      <div id="calendario" class="items"></div>
+    </div>
+  </section>
+
   <footer><i></i><i></i><i></i>© 2026 Kevin Mondragon Tapia</footer>
 </div>
 
@@ -366,6 +437,35 @@
   try { saved = localStorage.getItem("lang"); } catch (e) {}
   if (saved === "en" || saved === "es") setLang(saved);
   else if (!navigator.language.toLowerCase().startsWith("es")) setLang("en");
+
+  // Educación continua: añade aquí cada certificación, curso o programa (fecha = "AAAA-MM").
+  // tipo: "certificacion" | "curso" | "programa"
+  const FORMACION = [
+    { fecha: "2026-07", tipo: "programa", es: "Maestría en Análisis y Visualización de Datos Masivos (Big Data)", en: "Master's in Big Data Analysis and Visualization", emisor: "UNIR México", enCurso: true },
+    { fecha: "2025-12", tipo: "certificacion", es: "Inglés B2", en: "English B2", emisor: "iTEP" },
+    { fecha: "2024-10", tipo: "curso", es: "NestJS", en: "NestJS", emisor: "DevTalles" },
+  ];
+  const TIPOS = {
+    certificacion: ["var(--red)", "var(--on-red)"],
+    curso: ["var(--blue)", "var(--on-blue)"],
+    programa: ["var(--yellow)", "var(--on-yellow)"],
+  };
+  const MESES = { es: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+                  en: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"] };
+  const both = (es, en) => `<span lang="es">${es}</span><span lang="en">${en}</span>`;
+  const mes = (i) => both(MESES.es[i], MESES.en[i]);
+  const mesCorto = (i) => ["es", "en"].map((l) => `<span lang="${l}">${MESES[l][i][0]}<span>${MESES[l][i].slice(1)}</span></span>`).join("");
+  const anios = [...new Set(FORMACION.map((f) => f.fecha.slice(0, 4)))].sort().reverse();
+  document.getElementById("calendario").innerHTML = anios.map((anio) => {
+    const items = FORMACION.filter((f) => f.fecha.startsWith(anio)).sort((a, b) => b.fecha.localeCompare(a.fecha));
+    const celdas = MESES.es.map((_, i) => {
+      const f = items.find((x) => Number(x.fecha.slice(5)) === i + 1);
+      return f ? `<li class="on" style="--k:${TIPOS[f.tipo][0]};--on-k:${TIPOS[f.tipo][1]}">${mesCorto(i)}</li>` : `<li>${mesCorto(i)}</li>`;
+    }).join("");
+    const lista = items.map((f) => `<li style="--k:${TIPOS[f.tipo][0]}"><i></i><span class="when">${mes(Number(f.fecha.slice(5)) - 1)}</span>
+      <span><b>${both(f.es, f.en)}</b> <small>· ${f.emisor}${f.enCurso ? " · " + both("inicio, en curso", "started, in progress") : ""}</small></span></li>`).join("");
+    return `<div class="year"><h3>${anio}</h3><ul class="months" aria-hidden="true">${celdas}</ul><ul class="entries">${lista}</ul></div>`;
+  }).join("");
 
   document.getElementById("lang").addEventListener("click", () => setLang(root.dataset.lang === "es" ? "en" : "es"));
   document.getElementById("print").addEventListener("click", () => window.print());
