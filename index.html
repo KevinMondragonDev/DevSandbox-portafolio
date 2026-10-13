@@ -170,6 +170,7 @@
     display: grid; place-items: center; aspect-ratio: 1; background: var(--cell); color: var(--muted);
     font: 600 0.75rem/1 var(--font); letter-spacing: 0.06em; text-transform: uppercase;
   }
+  .months li.off { background: none; box-shadow: inset 0 0 0 1px var(--cell); }
   .months li.on { background: var(--k); color: var(--on-k); }
   .entries { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
   .entries li { display: grid; grid-template-columns: 12px 3.2em minmax(0, 1fr); gap: 10px; align-items: baseline; }
@@ -177,7 +178,7 @@
   .entries .when { font: 600 0.8125rem/1.6 var(--font); letter-spacing: 0.08em; text-transform: uppercase; }
   .entries b { font-weight: 600; }
   .entries small { font-size: 1em; color: var(--muted); }
-  .year .none { margin: 0; color: var(--muted); }
+  .note { margin: 0; max-width: 62ch; color: var(--muted); }
 
   footer {
     display: flex; align-items: center; gap: 8px;
@@ -217,7 +218,7 @@
     body::before, body::after, header.intro::before, .top, .links, footer,
     .figure::before, .figure::after, .figure i, h1::after, h2::before { display: none; }
     h2 { background: none; color: #000; padding: 0; }
-    .months, .legend, .entries i { display: none; }
+    .months, .legend, .entries i, .note, .year:not(:has(.entries)) { display: none; }
     .entries li { grid-template-columns: 3.2em minmax(0, 1fr); }
     .year h3 { font-size: 11pt; }
     code { background: none; padding: 0; }
@@ -419,6 +420,8 @@
         <li style="--k: var(--blue)"><i></i><span lang="es">Curso</span><span lang="en">Course</span></li>
         <li style="--k: var(--yellow)"><i></i><span lang="es">Programa</span><span lang="en">Program</span></li>
       </ul>
+      <p class="note" lang="es">Calendario de octubre de 2026 a diciembre de 2027. Cada curso o certificación que termine se marca en su mes.</p>
+      <p class="note" lang="en">Calendar from October 2026 to December 2027. Each course or certification I complete is marked on its month.</p>
       <div id="calendario" class="items"></div>
     </div>
   </section>
@@ -438,13 +441,11 @@
   if (saved === "en" || saved === "es") setLang(saved);
   else if (!navigator.language.toLowerCase().startsWith("es")) setLang("en");
 
-  // Educación continua: añade aquí cada certificación, curso o programa (fecha = "AAAA-MM").
-  // tipo: "certificacion" | "curso" | "programa"
-  const FORMACION = [
-    { fecha: "2026-07", tipo: "programa", es: "Maestría en Análisis y Visualización de Datos Masivos (Big Data)", en: "Master's in Big Data Analysis and Visualization", emisor: "UNIR México", enCurso: true },
-    { fecha: "2025-12", tipo: "certificacion", es: "Inglés B2", en: "English B2", emisor: "iTEP" },
-    { fecha: "2024-10", tipo: "curso", es: "NestJS", en: "NestJS", emisor: "DevTalles" },
-  ];
+  // Educación continua: el calendario va de DESDE a HASTA. Añade aquí cada certificación, curso o
+  // programa terminado (fecha = "AAAA-MM"; tipo: "certificacion" | "curso" | "programa"). Ejemplo:
+  //   { fecha: "2026-11", tipo: "curso", es: "Nombre del curso", en: "Course name", emisor: "Plataforma" },
+  const DESDE = "2026-10", HASTA = "2027-12";
+  const FORMACION = [];
   const TIPOS = {
     certificacion: ["var(--red)", "var(--on-red)"],
     curso: ["var(--blue)", "var(--on-blue)"],
@@ -455,16 +456,20 @@
   const both = (es, en) => `<span lang="es">${es}</span><span lang="en">${en}</span>`;
   const mes = (i) => both(MESES.es[i], MESES.en[i]);
   const mesCorto = (i) => ["es", "en"].map((l) => `<span lang="${l}">${MESES[l][i][0]}<span>${MESES[l][i].slice(1)}</span></span>`).join("");
-  const anios = [...new Set(FORMACION.map((f) => f.fecha.slice(0, 4)))].sort().reverse();
+  const enRango = (ym) => ym >= DESDE && ym <= HASTA;
+  const anios = [];
+  for (let a = Number(DESDE.slice(0, 4)); a <= Number(HASTA.slice(0, 4)); a++) anios.push(String(a));
   document.getElementById("calendario").innerHTML = anios.map((anio) => {
-    const items = FORMACION.filter((f) => f.fecha.startsWith(anio)).sort((a, b) => b.fecha.localeCompare(a.fecha));
+    const items = FORMACION.filter((f) => f.fecha.startsWith(anio) && enRango(f.fecha)).sort((a, b) => a.fecha.localeCompare(b.fecha));
     const celdas = MESES.es.map((_, i) => {
-      const f = items.find((x) => Number(x.fecha.slice(5)) === i + 1);
+      const ym = `${anio}-${String(i + 1).padStart(2, "0")}`;
+      if (!enRango(ym)) return `<li class="off"></li>`;
+      const f = items.find((x) => x.fecha === ym);
       return f ? `<li class="on" style="--k:${TIPOS[f.tipo][0]};--on-k:${TIPOS[f.tipo][1]}">${mesCorto(i)}</li>` : `<li>${mesCorto(i)}</li>`;
     }).join("");
     const lista = items.map((f) => `<li style="--k:${TIPOS[f.tipo][0]}"><i></i><span class="when">${mes(Number(f.fecha.slice(5)) - 1)}</span>
-      <span><b>${both(f.es, f.en)}</b> <small>· ${f.emisor}${f.enCurso ? " · " + both("inicio, en curso", "started, in progress") : ""}</small></span></li>`).join("");
-    return `<div class="year"><h3>${anio}</h3><ul class="months" aria-hidden="true">${celdas}</ul><ul class="entries">${lista}</ul></div>`;
+      <span><b>${both(f.es, f.en)}</b> <small>· ${f.emisor}</small></span></li>`).join("");
+    return `<div class="year"><h3>${anio}</h3><ul class="months" aria-hidden="true">${celdas}</ul>${lista ? `<ul class="entries">${lista}</ul>` : ""}</div>`;
   }).join("");
 
   document.getElementById("lang").addEventListener("click", () => setLang(root.dataset.lang === "es" ? "en" : "es"));
