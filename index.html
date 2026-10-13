@@ -150,26 +150,52 @@
   .item li { position: relative; margin-top: 6px; padding-left: 20px; }
   .item li::before { content: ""; position: absolute; left: 0; top: 0.62em; width: 10px; height: 3px; background: var(--c); }
   .stack { margin-top: 8px; font: 500 0.875rem/1.6 var(--font); color: var(--muted); }
-  /* Categorías de proyecto: DevSandbox (pequeño) y NightBuilds (grande). */
-  .cats { margin: 0; display: grid; gap: 8px; max-width: 62ch; }
-  .cats div { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 4px 14px; align-items: baseline; }
-  .cats dd { margin: 0; color: var(--muted); }
-  .cat { justify-self: start; padding: 1px 8px; border: 2px solid var(--fg); font: 600 0.8125rem/1.6 var(--font); letter-spacing: 0.06em; white-space: nowrap; }
+  /* Proyectos: lo terminado destacado; lo pendiente, en gris «en construcción». */
+  .lead { margin: 0; max-width: 62ch; font-size: 1.125rem; }
+  .tally { display: flex; flex-wrap: wrap; gap: 10px; margin: 0; padding: 0; list-style: none; }
+  .tally li { display: flex; align-items: baseline; gap: 8px; padding: 6px 12px; border: 2px solid var(--fg); font: 500 0.875rem/1.5 var(--font); }
+  .tally b { font-size: 1.375rem; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+  .tally .pend { border: 2px dashed var(--soon-line); color: var(--soon-fg); background: var(--soon-bg); }
+  .cat { display: inline-block; padding: 1px 8px; border: 2px solid var(--fg); font: 600 0.8125rem/1.6 var(--font); letter-spacing: 0.06em; white-space: nowrap; }
   .cat.night { background: var(--fg); color: var(--bg); }
-  .item .cat { display: inline-block; margin-top: 6px; }
-  @media (max-width: 480px) { .cats div { grid-template-columns: 1fr; } }
-  /* Próximamente: tarjetas grises «en construcción» para proyectos aún sin empezar. */
-  .soon { display: grid; gap: 10px; }
-  .soon > h3 { margin: 0; font: 700 0.8125rem/1.4 var(--font); letter-spacing: 0.14em; text-transform: uppercase; color: var(--soon-fg); }
-  .soon-grid { margin: 6px 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+  .cat.done { background: var(--yellow); color: var(--on-yellow); }
+  .feat { padding: 20px; border: 3px solid var(--fg); box-shadow: 8px 8px 0 var(--yellow); }
+  .feat .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+  .feat h3 { font-size: 1.5rem; line-height: 1.2; }
+  .item ul.nums { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0; margin: 16px 0 6px; max-width: none; border: 2px solid var(--fg); }
+  .item ul.nums li { margin: 0; padding: 10px 12px; display: grid; gap: 2px; font: 500 0.75rem/1.4 var(--font); letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); box-shadow: 1px 0 0 var(--fg), 0 1px 0 var(--fg); }
+  .item ul.nums li::before, .item ul.chips li::before { content: none; }
+  .nums b { font-size: 1.75rem; font-weight: 700; line-height: 1; letter-spacing: 0; color: var(--fg); font-variant-numeric: tabular-nums; }
+  .item ul.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; max-width: none; }
+  .item ul.chips li { margin: 0; padding: 2px 10px; background: var(--cell); font: 500 0.875rem/1.6 var(--font); }
+
+  .soon { display: grid; gap: 14px; margin-top: 8px; padding-top: 24px; border-top: 2px dashed var(--soon-line); }
+  .soon-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 16px; }
+  .soon-head h3 { margin: 0; font-size: 1.1875rem; font-weight: 600; }
+  .progress { padding: 1px 8px; background: var(--soon-bg); color: var(--soon-fg); font: 500 0.8125rem/1.6 var(--font); letter-spacing: 0.08em; text-transform: uppercase; font-variant-numeric: tabular-nums; }
+  .soon > .sub { margin: 0; max-width: 62ch; }
+  .group { display: grid; gap: 8px; }
+  .group h4, .group summary { margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font: 600 1rem/1.4 var(--font); }
+  .group p { margin: 0; max-width: 62ch; color: var(--muted); }
+  .count { font-variant-numeric: tabular-nums; color: var(--muted); }
+  details.group > summary { cursor: pointer; list-style: none; padding: 10px 12px; border: 2px dashed var(--soon-line); background: var(--soon-bg); }
+  details.group > summary::-webkit-details-marker { display: none; }
+  details.group > summary .more { margin-left: auto; font-weight: 500; text-decoration: underline; text-decoration-color: var(--red); text-decoration-thickness: 2px; text-underline-offset: 4px; }
+  details.group > summary .more::after { content: " +"; }
+  details.group[open] > summary .more::after { content: " −"; }
+  details.group > summary:hover .more { color: var(--red); }
+  details.group > summary:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+  details.group[open] > summary { margin-bottom: 4px; }
+  .soon-grid { margin: 4px 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
   .soon-grid li { position: relative; padding: 22px 12px 12px; background: var(--soon-bg); border: 2px dashed var(--soon-line); color: var(--soon-fg); }
   .soon-grid li::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 10px; background: repeating-linear-gradient(-45deg, var(--soon-line) 0 8px, transparent 8px 16px); }
-  .soon-grid .cat, .soon-grid .cat.night { border-color: var(--soon-line); background: none; color: var(--soon-fg); font-size: 0.6875rem; }
-  .soon-grid h4 { margin: 8px 0 0; font-size: 1rem; font-weight: 600; line-height: 1.3; }
+  .soon-grid h4 { margin: 0; font-size: 1rem; font-weight: 600; line-height: 1.3; }
   .soon-grid a { color: inherit; text-decoration-color: var(--soon-line); }
+  .soon-grid a::after { content: " ↗"; font-weight: 400; }
   .soon-grid a:hover { color: var(--fg); }
-  .soon-grid p { margin: 4px 0 0; font-size: 0.9375rem; line-height: 1.45; }
+  .soon-grid p { margin: 4px 0 0; font-size: 0.9375rem; line-height: 1.45; color: inherit; }
   .soon-grid .stack { display: block; margin-top: 6px; font-size: 0.8125rem; color: var(--soon-fg); }
+  @media (max-width: 640px) { .feat { padding: 14px; box-shadow: 5px 5px 0 var(--yellow); } .feat h3 { font-size: 1.25rem; } }
   .links { margin-top: 6px; font: 500 0.875rem/1.6 var(--font); display: flex; flex-wrap: wrap; gap: 4px 16px; }
 
   dl.skills { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 10px 16px; margin: 0; }
@@ -256,8 +282,12 @@
     section { padding-block: 10pt; gap: 8pt 16pt; grid-template-columns: 96pt minmax(0, 1fr); border-top-width: 1pt; }
     .items { gap: 10pt; }
     .item { break-inside: avoid; }
-    .cats, .soon { display: none; }
-    .cat, .cat.night { border: 0; padding: 0; background: none; color: #000; }
+    .soon, .lead, .tally, .nums { display: none; }
+    .cat, .cat.night, .cat.done { border: 0; padding: 0; background: none; color: #000; }
+    .feat { padding: 0; border: 0; box-shadow: none; }
+    .feat h3 { font-size: 10.5pt; }
+    .item ul.chips li { background: none; padding: 0; }
+    .item ul.chips li:not(:last-child)::after { content: " ·"; }
     .item h3 { font-size: 10.5pt; }
     .item h3 a::after { content: ""; }
     .item p, .item ul { max-width: none; }
@@ -270,11 +300,11 @@
 
   <div class="top">
     <nav aria-label="Secciones">
-      <a href="#proyectos"><span lang="es">Proyectos</span><span lang="en">Projects</span></a>
       <a href="#experiencia"><span lang="es">Experiencia</span><span lang="en">Experience</span></a>
       <a href="#habilidades"><span lang="es">Habilidades</span><span lang="en">Skills</span></a>
       <a href="#educacion"><span lang="es">Educación</span><span lang="en">Education</span></a>
       <a href="#formacion"><span lang="es">Educación continua</span><span lang="en">Continuing education</span></a>
+      <a href="#proyectos"><span lang="es">Proyectos</span><span lang="en">Projects</span></a>
     </nav>
     <div class="actions">
       <button type="button" id="print"><span lang="es">Guardar CV en PDF</span><span lang="en">Save CV as PDF</span></button>
@@ -301,169 +331,6 @@
       <li><a href="https://github.com/KevinMondragonDev">github.com/KevinMondragonDev</a></li>
     </ul>
   </header>
-
-  <!-- Proyectos: solo se listan repositorios con prefijo "DevSandbox-" (pequeños) o "NightBuilds-" (grandes).
-       Antes el prefijo era "sideproject-". Los que están sin empezar van en el bloque gris «Próximamente», nunca como proyectos hechos. -->
-  <section id="proyectos">
-    <h2><span lang="es">Proyectos</span><span lang="en">Projects</span></h2>
-    <div class="items">
-      <dl class="cats">
-        <div>
-          <dt><span class="cat">DevSandbox</span></dt>
-          <dd><span lang="es">Proyecto pequeño, de hasta 8 horas: un espacio para practicar un tema concreto y terminarlo rápido.</span><span lang="en">Small project, up to 8 hours: a space to practise one specific topic and finish it quickly.</span></dd>
-        </div>
-        <div>
-          <dt><span class="cat night">NightBuilds</span></dt>
-          <dd><span lang="es">Proyecto grande, de 8 horas o más: varias piezas (base de datos, orquestación, nube o API) y decisiones de diseño propias.</span><span lang="en">Larger project, 8 hours or more: several moving parts (database, orchestration, cloud or API) and my own design decisions.</span></dd>
-        </div>
-      </dl>
-      <article class="item">
-        <div class="head">
-          <h3><span lang="es">Terrazas de Madrid: de MongoDB a Neo4j</span><span lang="en">Madrid terraces: from MongoDB to Neo4j</span></h3>
-          <span class="meta"><span lang="es">trabajo en equipo · repo privado</span><span lang="en">team project · private repo</span></span>
-        </div>
-        <span class="cat night">NightBuilds</span>
-        <p class="sub"><span lang="es">Investigación y ejercicio práctico tipo prueba técnica · oct 2026</span><span lang="en">Research and hands-on exercise in the style of a technical test · Oct 2026</span></p>
-        <ul lang="es">
-          <li>Importación de datos abiertos de locales y terrazas de Madrid a MongoDB Atlas, con monitorización del replica set mediante <code>mongostat</code> y <code>mongotop</code>.</li>
-          <li>Limpieza de los datos con Python y consultas y actualizaciones en <code>mongosh</code> sobre barrios, horarios y terrazas a inspeccionar.</li>
-          <li>Modelo de grafo en Neo4j cargado con Cypher desde un CSV exportado de MongoDB: 2,999 locales, 120 barrios, 20 distritos y 8 tipos de terraza.</li>
-        </ul>
-        <ul lang="en">
-          <li>Imported Madrid open data on venues and terraces into MongoDB Atlas, monitoring the replica set with <code>mongostat</code> and <code>mongotop</code>.</li>
-          <li>Cleaned the data with Python and wrote <code>mongosh</code> queries and updates on neighbourhoods, opening hours and terraces flagged for inspection.</li>
-          <li>Graph model in Neo4j loaded with Cypher from a CSV exported from MongoDB: 2,999 venues, 120 neighbourhoods, 20 districts and 8 terrace types.</li>
-        </ul>
-        <div class="stack">MongoDB Atlas · mongosh · Python · Neo4j · Cypher</div>
-      </article>
-      <div class="soon">
-        <h3><span lang="es">Próximamente</span><span lang="en">Coming soon</span></h3>
-        <p class="sub"><span lang="es">En construcción: retos ya planteados y con repositorio público, todavía sin empezar. Son los proyectos de mi programa de estudio de ingeniería de datos.</span><span lang="en">Under construction: challenges already defined, each with a public repository, not started yet. They are the projects of my data engineering study programme.</span></p>
-        <ul class="soon-grid">
-        <li>
-          <span class="cat">DevSandbox</span>
-          <h4><a href="https://github.com/KevinMondragonDev/DevSandbox-estado-de-cuenta"><span lang="es">Estado de cuenta</span><span lang="en">Bank statement</span></a></h4>
-          <p><span lang="es">Mi primer ETL en Python puro: de un CSV de movimientos a un reporte de gastos.</span><span lang="en">My first ETL in plain Python: from a CSV of transactions to a spending report.</span></p>
-          <span class="stack">Python</span>
-        </li>
-        <li>
-          <span class="cat">DevSandbox</span>
-          <h4><a href="https://github.com/KevinMondragonDev/DevSandbox-validador-de-datos"><span lang="es">Validador de datos</span><span lang="en">Data validator</span></a></h4>
-          <p><span lang="es">Biblioteca que revisa un CSV fila por fila y dice qué está mal y por qué.</span><span lang="en">Library that checks a CSV row by row and reports what is wrong and why.</span></p>
-          <span class="stack">Python</span>
-        </li>
-        <li>
-          <span class="cat">DevSandbox</span>
-          <h4><a href="https://github.com/KevinMondragonDev/DevSandbox-tipo-de-cambio"><span lang="es">Radar del tipo de cambio</span><span lang="en">Exchange-rate radar</span></a></h4>
-          <p><span lang="es">ETL, análisis y tablero del tipo de cambio USD/MXN.</span><span lang="en">ETL, analysis and dashboard of the USD/MXN exchange rate.</span></p>
-          <span class="stack">pandas · Plotly</span>
-        </li>
-        <li>
-          <span class="cat">DevSandbox</span>
-          <h4><a href="https://github.com/KevinMondragonDev/DevSandbox-monitor-de-logs"><span lang="es">Monitor de logs</span><span lang="en">Log monitor</span></a></h4>
-          <p><span lang="es">ETL incremental que resume errores y rutas lentas de los logs de una API.</span><span lang="en">Incremental ETL that summarises errors and slow routes from API logs.</span></p>
-          <span class="stack">Python</span>
-        </li>
-        <li>
-          <span class="cat">DevSandbox</span>
-          <h4><a href="https://github.com/KevinMondragonDev/DevSandbox-ingesta-multifuente"><span lang="es">Ingesta multifuente</span><span lang="en">Multi-source ingestion</span></a></h4>
-          <p><span lang="es">Ingesta repetible de CSV, PostgreSQL y una API REST a una zona raw particionada.</span><span lang="en">Repeatable ingestion of CSV, PostgreSQL and a REST API into a partitioned raw zone.</span></p>
-          <span class="stack">PostgreSQL · Parquet</span>
-        </li>
-        <li>
-          <span class="cat">DevSandbox</span>
-          <h4><a href="https://github.com/KevinMondragonDev/DevSandbox-calidad-de-datos"><span lang="es">Calidad de datos</span><span lang="en">Data quality</span></a></h4>
-          <p><span lang="es">Diagnóstico y limpieza de un extracto bancario con cada decisión documentada.</span><span lang="en">Profiling and cleaning of a bank extract, with every decision documented.</span></p>
-          <span class="stack">pandas · Polars</span>
-        </li>
-        <li>
-          <span class="cat">DevSandbox</span>
-          <h4><a href="https://github.com/KevinMondragonDev/DevSandbox-limpiador"><span lang="es">De scripts a paquete</span><span lang="en">From scripts to a package</span></a></h4>
-          <p><span lang="es">Paquete instalable con reglas de limpieza, probado con pytest.</span><span lang="en">Installable package of cleaning rules, tested with pytest.</span></p>
-          <span class="stack">pytest · ruff</span>
-        </li>
-        <li>
-          <span class="cat night">NightBuilds</span>
-          <h4><a href="https://github.com/KevinMondragonDev/NightBuilds-pipeline-banco"><span lang="es">Pipeline diario del banco</span><span lang="en">Daily bank pipeline</span></a></h4>
-          <p><span lang="es">Pipeline idempotente que extrae, limpia y carga en PostgreSQL, orquestado con Airflow.</span><span lang="en">Idempotent pipeline that extracts, cleans and loads into PostgreSQL, orchestrated with Airflow.</span></p>
-          <span class="stack">Airflow · PostgreSQL</span>
-        </li>
-        <li>
-          <span class="cat night">NightBuilds</span>
-          <h4><a href="https://github.com/KevinMondragonDev/NightBuilds-mini-framework-etl"><span lang="es">Mini framework de ETL</span><span lang="en">Mini ETL framework</span></a></h4>
-          <p><span lang="es">Framework de ETL con fuentes y destinos intercambiables, con patrones de diseño.</span><span lang="en">ETL framework with pluggable sources and sinks, built with design patterns.</span></p>
-          <span class="stack">Python</span>
-        </li>
-        <li>
-          <span class="cat night">NightBuilds</span>
-          <h4><a href="https://github.com/KevinMondragonDev/NightBuilds-api-banco"><span lang="es">API del banco</span><span lang="en">Bank API</span></a></h4>
-          <p><span lang="es">API REST en capas que sirve clientes, cuentas y movimientos.</span><span lang="en">Layered REST API serving customers, accounts and transactions.</span></p>
-          <span class="stack">FastAPI · PostgreSQL</span>
-        </li>
-        <li>
-          <span class="cat night">NightBuilds</span>
-          <h4><a href="https://github.com/KevinMondragonDev/NightBuilds-data-lake-eventos"><span lang="es">Data lake por eventos</span><span lang="en">Event-driven data lake</span></a></h4>
-          <p><span lang="es">Data lake dirigido por eventos en AWS local, con una API que sirve el resumen.</span><span lang="en">Event-driven data lake on local AWS, with an API serving the summary.</span></p>
-          <span class="stack">S3 · SQS · Lambda</span>
-        </li>
-        <li>
-          <span class="cat night">NightBuilds</span>
-          <h4><a href="https://github.com/KevinMondragonDev/NightBuilds-guardia-de-prompts"><span lang="es">Guardia de prompts</span><span lang="en">Prompt guard</span></a></h4>
-          <p><span lang="es">Capa de seguridad que analiza cada mensaje antes de enviarlo a un modelo de lenguaje.</span><span lang="en">Security layer that parses every message before it reaches a language model.</span></p>
-          <span class="stack">Lark · FastAPI · mypy</span>
-        </li>
-        <li>
-          <span class="cat night">NightBuilds</span>
-          <h4><a href="https://github.com/KevinMondragonDev/NightBuilds-lakehouse-spark"><span lang="es">Lakehouse con Spark</span><span lang="en">Lakehouse with Spark</span></a></h4>
-          <p><span lang="es">Lakehouse en tres capas sobre millones de viajes de taxi.</span><span lang="en">Three-layer lakehouse over millions of taxi trips.</span></p>
-          <span class="stack">PySpark · Parquet</span>
-        </li>
-        <li>
-          <span class="cat night">NightBuilds</span>
-          <h4><a href="https://github.com/KevinMondragonDev/NightBuilds-ingesta-s3"><span lang="es">Ingesta a S3</span><span lang="en">S3 ingestion</span></a></h4>
-          <p><span lang="es">Pipeline incremental e idempotente para los archivos que llegan a diario a S3.</span><span lang="en">Incremental, idempotent pipeline for files landing daily in S3.</span></p>
-          <span class="stack">S3 · boto3</span>
-        </li>
-        <li>
-          <span class="cat night">NightBuilds</span>
-          <h4><a href="https://github.com/KevinMondragonDev/NightBuilds-data-lake"><span lang="es">Data lake</span><span lang="en">Data lake</span></a></h4>
-          <p><span lang="es">Tres capas en Parquet con catálogo, consultas SQL y un tablero.</span><span lang="en">Three Parquet layers with a catalogue, SQL queries and a dashboard.</span></p>
-          <span class="stack">S3 · Glue · Athena · D3.js</span>
-        </li>
-        <li>
-          <span class="cat night">NightBuilds</span>
-          <h4><a href="https://github.com/KevinMondragonDev/NightBuilds-data-warehouse"><span lang="es">Data warehouse</span><span lang="en">Data warehouse</span></a></h4>
-          <p><span lang="es">Modelo estrella con historial de cambios y pruebas de datos.</span><span lang="en">Star schema with change history and data tests.</span></p>
-          <span class="stack">PostgreSQL · dbt · D3.js</span>
-        </li>
-        <li>
-          <span class="cat night">NightBuilds</span>
-          <h4><a href="https://github.com/KevinMondragonDev/NightBuilds-etl-produccion"><span lang="es">ETL a producción</span><span lang="en">ETL to production</span></a></h4>
-          <p><span lang="es">Un ETL desplegable y operable: infraestructura como código, CI/CD y alertas.</span><span lang="en">A deployable, operable ETL: infrastructure as code, CI/CD and alerts.</span></p>
-          <span class="stack">Docker · CI/CD</span>
-        </li>
-        <li>
-          <span class="cat night">NightBuilds</span>
-          <h4><a href="https://github.com/KevinMondragonDev/NightBuilds-rag-local"><span lang="es">RAG local</span><span lang="en">Local RAG</span></a></h4>
-          <p><span lang="es">El pipeline de datos de un asistente RAG, todo en local.</span><span lang="en">The data pipeline behind a RAG assistant, fully local.</span></p>
-          <span class="stack">pgvector · embeddings</span>
-        </li>
-        <li>
-          <span class="cat night">NightBuilds</span>
-          <h4><a href="https://github.com/KevinMondragonDev/NightBuilds-tiempo-real"><span lang="es">Casi tiempo real</span><span lang="en">Near real time</span></a></h4>
-          <p><span lang="es">Flujo de eventos con ventanas de tiempo y detección de anomalías.</span><span lang="en">Event stream with time windows and anomaly detection.</span></p>
-          <span class="stack">SQS · D3.js</span>
-        </li>
-        <li>
-          <span class="cat night">NightBuilds</span>
-          <h4><a href="https://github.com/KevinMondragonDev/NightBuilds-gobierno-de-datos"><span lang="es">Gobierno de datos</span><span lang="en">Data governance</span></a></h4>
-          <p><span lang="es">Inventario de datos personales y controles automáticos de acceso.</span><span lang="en">Personal-data inventory and automated access controls.</span></p>
-          <span class="stack">PostgreSQL · Python</span>
-        </li>
-        </ul>
-      </div>
-    </div>
-  </section>
 
   <section id="experiencia">
     <h2><span lang="es">Experiencia</span><span lang="en">Experience</span></h2>
@@ -586,6 +453,170 @@
       <p class="note" lang="es">Calendario de octubre de 2026 a diciembre de 2027. Cada curso o certificación que termine se marca en su mes.</p>
       <p class="note" lang="en">Calendar from October 2026 to December 2027. Each course or certification I complete is marked on its month.</p>
       <div id="calendario" class="items"></div>
+    </div>
+  </section>
+
+  <!-- Proyectos: solo repositorios con prefijo "DevSandbox-" (pequeños) o "NightBuilds-" (grandes).
+       Lo terminado va arriba y destacado; lo que está sin empezar va en gris, nunca como proyecto hecho. -->
+  <section id="proyectos">
+    <h2><span lang="es">Proyectos</span><span lang="en">Projects</span></h2>
+    <div class="items">
+      <p class="lead"><span lang="es">Lo que ya construí y lo que estoy construyendo para pasar de backend a ingeniería de datos. Cada proyecto tiene su propio repositorio.</span><span lang="en">What I have built and what I am building to move from backend to data engineering. Every project has its own repository.</span></p>
+      <ul class="tally">
+        <li><b>1</b><span lang="es">terminado</span><span lang="en">finished</span></li>
+        <li class="pend"><b>13</b><span lang="es">NightBuilds en construcción</span><span lang="en">NightBuilds under construction</span></li>
+        <li class="pend"><b>7</b><span lang="es">DevSandbox en construcción</span><span lang="en">DevSandbox under construction</span></li>
+      </ul>
+
+      <article class="item feat">
+        <div class="tags">
+          <span class="cat done"><span lang="es">Terminado · oct 2026</span><span lang="en">Finished · Oct 2026</span></span>
+          <span class="cat night">NightBuilds</span>
+        </div>
+        <h3><span lang="es">Terrazas de Madrid: de MongoDB a Neo4j</span><span lang="en">Madrid terraces: from MongoDB to Neo4j</span></h3>
+        <p class="sub"><span lang="es">Trabajo en equipo de la Maestría en Big Data (UNIR), planteado como una prueba técnica · repositorio privado</span><span lang="en">Team project for the Master's in Big Data (UNIR), framed as a technical test · private repository</span></p>
+        <ul class="nums">
+          <li><b>2,999</b><span lang="es">locales</span><span lang="en">venues</span></li>
+          <li><b>120</b><span lang="es">barrios</span><span lang="en">neighbourhoods</span></li>
+          <li><b>20</b><span lang="es">distritos</span><span lang="en">districts</span></li>
+          <li><b>8</b><span lang="es">tipos de terraza</span><span lang="en">terrace types</span></li>
+        </ul>
+        <ul lang="es">
+          <li>Importación de datos abiertos de locales y terrazas de Madrid a MongoDB Atlas, con monitorización del replica set mediante <code>mongostat</code> y <code>mongotop</code>.</li>
+          <li>Limpieza de los datos con Python y consultas y actualizaciones en <code>mongosh</code> sobre barrios, horarios y terrazas a inspeccionar.</li>
+          <li>Modelo de grafo en Neo4j cargado con Cypher desde un CSV exportado de MongoDB: 2,999 locales, 120 barrios, 20 distritos y 8 tipos de terraza.</li>
+        </ul>
+        <ul lang="en">
+          <li>Imported Madrid open data on venues and terraces into MongoDB Atlas, monitoring the replica set with <code>mongostat</code> and <code>mongotop</code>.</li>
+          <li>Cleaned the data with Python and wrote <code>mongosh</code> queries and updates on neighbourhoods, opening hours and terraces flagged for inspection.</li>
+          <li>Graph model in Neo4j loaded with Cypher from a CSV exported from MongoDB: 2,999 venues, 120 neighbourhoods, 20 districts and 8 terrace types.</li>
+        </ul>
+        <ul class="chips"><li>MongoDB Atlas</li><li>mongosh</li><li>Python</li><li>Neo4j</li><li>Cypher</li></ul>
+      </article>
+
+      <div class="soon">
+        <div class="soon-head">
+          <h3><span lang="es">En construcción</span><span lang="en">Under construction</span></h3>
+          <span class="progress"><span lang="es">0 de 20 terminados</span><span lang="en">0 of 20 finished</span></span>
+        </div>
+        <p class="sub"><span lang="es">Mi plan de práctica en ingeniería de datos: 20 retos ya definidos, con su problema, sus datos y su repositorio público. Todavía no empiezo ninguno; cada tarjeta dejará de ser gris cuando lo termine.</span><span lang="en">My data engineering practice plan: 20 challenges already defined, each with its problem, data and public repository. I have not started any yet; a card stops being grey once I finish it.</span></p>
+
+        <div class="group">
+          <h4><span class="cat night">NightBuilds</span> <span class="count">13</span></h4>
+          <p><span lang="es">Proyectos grandes, de 8 horas o más: varias piezas (base de datos, orquestación, nube o API) y decisiones de diseño propias.</span><span lang="en">Larger projects, 8 hours or more: several moving parts (database, orchestration, cloud or API) and my own design decisions.</span></p>
+          <ul class="soon-grid">
+        <li>
+          <h4><a href="https://github.com/KevinMondragonDev/NightBuilds-pipeline-banco"><span lang="es">Pipeline diario del banco</span><span lang="en">Daily bank pipeline</span></a></h4>
+          <p><span lang="es">Pipeline idempotente que extrae, limpia y carga en PostgreSQL, orquestado con Airflow.</span><span lang="en">Idempotent pipeline that extracts, cleans and loads into PostgreSQL, orchestrated with Airflow.</span></p>
+          <span class="stack">Airflow · PostgreSQL</span>
+        </li>
+        <li>
+          <h4><a href="https://github.com/KevinMondragonDev/NightBuilds-mini-framework-etl"><span lang="es">Mini framework de ETL</span><span lang="en">Mini ETL framework</span></a></h4>
+          <p><span lang="es">Framework de ETL con fuentes y destinos intercambiables, con patrones de diseño.</span><span lang="en">ETL framework with pluggable sources and sinks, built with design patterns.</span></p>
+          <span class="stack">Python</span>
+        </li>
+        <li>
+          <h4><a href="https://github.com/KevinMondragonDev/NightBuilds-api-banco"><span lang="es">API del banco</span><span lang="en">Bank API</span></a></h4>
+          <p><span lang="es">API REST en capas que sirve clientes, cuentas y movimientos.</span><span lang="en">Layered REST API serving customers, accounts and transactions.</span></p>
+          <span class="stack">FastAPI · PostgreSQL</span>
+        </li>
+        <li>
+          <h4><a href="https://github.com/KevinMondragonDev/NightBuilds-data-lake-eventos"><span lang="es">Data lake por eventos</span><span lang="en">Event-driven data lake</span></a></h4>
+          <p><span lang="es">Data lake dirigido por eventos en AWS local, con una API que sirve el resumen.</span><span lang="en">Event-driven data lake on local AWS, with an API serving the summary.</span></p>
+          <span class="stack">S3 · SQS · Lambda</span>
+        </li>
+        <li>
+          <h4><a href="https://github.com/KevinMondragonDev/NightBuilds-guardia-de-prompts"><span lang="es">Guardia de prompts</span><span lang="en">Prompt guard</span></a></h4>
+          <p><span lang="es">Capa de seguridad que analiza cada mensaje antes de enviarlo a un modelo de lenguaje.</span><span lang="en">Security layer that parses every message before it reaches a language model.</span></p>
+          <span class="stack">Lark · FastAPI · mypy</span>
+        </li>
+        <li>
+          <h4><a href="https://github.com/KevinMondragonDev/NightBuilds-lakehouse-spark"><span lang="es">Lakehouse con Spark</span><span lang="en">Lakehouse with Spark</span></a></h4>
+          <p><span lang="es">Lakehouse en tres capas sobre millones de viajes de taxi.</span><span lang="en">Three-layer lakehouse over millions of taxi trips.</span></p>
+          <span class="stack">PySpark · Parquet</span>
+        </li>
+        <li>
+          <h4><a href="https://github.com/KevinMondragonDev/NightBuilds-ingesta-s3"><span lang="es">Ingesta a S3</span><span lang="en">S3 ingestion</span></a></h4>
+          <p><span lang="es">Pipeline incremental e idempotente para los archivos que llegan a diario a S3.</span><span lang="en">Incremental, idempotent pipeline for files landing daily in S3.</span></p>
+          <span class="stack">S3 · boto3</span>
+        </li>
+        <li>
+          <h4><a href="https://github.com/KevinMondragonDev/NightBuilds-data-lake"><span lang="es">Data lake</span><span lang="en">Data lake</span></a></h4>
+          <p><span lang="es">Tres capas en Parquet con catálogo, consultas SQL y un tablero.</span><span lang="en">Three Parquet layers with a catalogue, SQL queries and a dashboard.</span></p>
+          <span class="stack">S3 · Glue · Athena · D3.js</span>
+        </li>
+        <li>
+          <h4><a href="https://github.com/KevinMondragonDev/NightBuilds-data-warehouse"><span lang="es">Data warehouse</span><span lang="en">Data warehouse</span></a></h4>
+          <p><span lang="es">Modelo estrella con historial de cambios y pruebas de datos.</span><span lang="en">Star schema with change history and data tests.</span></p>
+          <span class="stack">PostgreSQL · dbt · D3.js</span>
+        </li>
+        <li>
+          <h4><a href="https://github.com/KevinMondragonDev/NightBuilds-etl-produccion"><span lang="es">ETL a producción</span><span lang="en">ETL to production</span></a></h4>
+          <p><span lang="es">Un ETL desplegable y operable: infraestructura como código, CI/CD y alertas.</span><span lang="en">A deployable, operable ETL: infrastructure as code, CI/CD and alerts.</span></p>
+          <span class="stack">Docker · CI/CD</span>
+        </li>
+        <li>
+          <h4><a href="https://github.com/KevinMondragonDev/NightBuilds-rag-local"><span lang="es">RAG local</span><span lang="en">Local RAG</span></a></h4>
+          <p><span lang="es">El pipeline de datos de un asistente RAG, todo en local.</span><span lang="en">The data pipeline behind a RAG assistant, fully local.</span></p>
+          <span class="stack">pgvector · embeddings</span>
+        </li>
+        <li>
+          <h4><a href="https://github.com/KevinMondragonDev/NightBuilds-tiempo-real"><span lang="es">Casi tiempo real</span><span lang="en">Near real time</span></a></h4>
+          <p><span lang="es">Flujo de eventos con ventanas de tiempo y detección de anomalías.</span><span lang="en">Event stream with time windows and anomaly detection.</span></p>
+          <span class="stack">SQS · D3.js</span>
+        </li>
+        <li>
+          <h4><a href="https://github.com/KevinMondragonDev/NightBuilds-gobierno-de-datos"><span lang="es">Gobierno de datos</span><span lang="en">Data governance</span></a></h4>
+          <p><span lang="es">Inventario de datos personales y controles automáticos de acceso.</span><span lang="en">Personal-data inventory and automated access controls.</span></p>
+          <span class="stack">PostgreSQL · Python</span>
+        </li>
+          </ul>
+        </div>
+
+        <details class="group">
+          <summary><span class="cat">DevSandbox</span> <span class="count">7</span> <span class="more"><span lang="es">Ver los proyectos pequeños</span><span lang="en">Show the small projects</span></span></summary>
+          <p><span lang="es">Proyectos pequeños, de hasta 8 horas: un espacio para practicar un tema concreto y terminarlo rápido.</span><span lang="en">Small projects, up to 8 hours: a space to practise one specific topic and finish it quickly.</span></p>
+          <ul class="soon-grid">
+        <li>
+          <h4><a href="https://github.com/KevinMondragonDev/DevSandbox-estado-de-cuenta"><span lang="es">Estado de cuenta</span><span lang="en">Bank statement</span></a></h4>
+          <p><span lang="es">Mi primer ETL en Python puro: de un CSV de movimientos a un reporte de gastos.</span><span lang="en">My first ETL in plain Python: from a CSV of transactions to a spending report.</span></p>
+          <span class="stack">Python</span>
+        </li>
+        <li>
+          <h4><a href="https://github.com/KevinMondragonDev/DevSandbox-validador-de-datos"><span lang="es">Validador de datos</span><span lang="en">Data validator</span></a></h4>
+          <p><span lang="es">Biblioteca que revisa un CSV fila por fila y dice qué está mal y por qué.</span><span lang="en">Library that checks a CSV row by row and reports what is wrong and why.</span></p>
+          <span class="stack">Python</span>
+        </li>
+        <li>
+          <h4><a href="https://github.com/KevinMondragonDev/DevSandbox-tipo-de-cambio"><span lang="es">Radar del tipo de cambio</span><span lang="en">Exchange-rate radar</span></a></h4>
+          <p><span lang="es">ETL, análisis y tablero del tipo de cambio USD/MXN.</span><span lang="en">ETL, analysis and dashboard of the USD/MXN exchange rate.</span></p>
+          <span class="stack">pandas · Plotly</span>
+        </li>
+        <li>
+          <h4><a href="https://github.com/KevinMondragonDev/DevSandbox-monitor-de-logs"><span lang="es">Monitor de logs</span><span lang="en">Log monitor</span></a></h4>
+          <p><span lang="es">ETL incremental que resume errores y rutas lentas de los logs de una API.</span><span lang="en">Incremental ETL that summarises errors and slow routes from API logs.</span></p>
+          <span class="stack">Python</span>
+        </li>
+        <li>
+          <h4><a href="https://github.com/KevinMondragonDev/DevSandbox-ingesta-multifuente"><span lang="es">Ingesta multifuente</span><span lang="en">Multi-source ingestion</span></a></h4>
+          <p><span lang="es">Ingesta repetible de CSV, PostgreSQL y una API REST a una zona raw particionada.</span><span lang="en">Repeatable ingestion of CSV, PostgreSQL and a REST API into a partitioned raw zone.</span></p>
+          <span class="stack">PostgreSQL · Parquet</span>
+        </li>
+        <li>
+          <h4><a href="https://github.com/KevinMondragonDev/DevSandbox-calidad-de-datos"><span lang="es">Calidad de datos</span><span lang="en">Data quality</span></a></h4>
+          <p><span lang="es">Diagnóstico y limpieza de un extracto bancario con cada decisión documentada.</span><span lang="en">Profiling and cleaning of a bank extract, with every decision documented.</span></p>
+          <span class="stack">pandas · Polars</span>
+        </li>
+        <li>
+          <h4><a href="https://github.com/KevinMondragonDev/DevSandbox-limpiador"><span lang="es">De scripts a paquete</span><span lang="en">From scripts to a package</span></a></h4>
+          <p><span lang="es">Paquete instalable con reglas de limpieza, probado con pytest.</span><span lang="en">Installable package of cleaning rules, tested with pytest.</span></p>
+          <span class="stack">pytest · ruff</span>
+        </li>
+          </ul>
+        </details>
+
+        <p class="links"><a href="https://github.com/KevinMondragonDev?tab=repositories"><span lang="es">Ver todos los repositorios en GitHub</span><span lang="en">See every repository on GitHub</span></a></p>
+      </div>
     </div>
   </section>
 
