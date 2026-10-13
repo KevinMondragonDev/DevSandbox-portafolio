@@ -147,6 +147,14 @@
   .item li { position: relative; margin-top: 6px; padding-left: 20px; }
   .item li::before { content: ""; position: absolute; left: 0; top: 0.62em; width: 10px; height: 3px; background: var(--c); }
   .stack { margin-top: 8px; font: 500 0.875rem/1.6 var(--font); color: var(--muted); }
+  /* Categorías de proyecto: DevSandbox (pequeño) y NightBuilds (grande). */
+  .cats { margin: 0; display: grid; gap: 8px; max-width: 62ch; }
+  .cats div { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: 4px 14px; align-items: baseline; }
+  .cats dd { margin: 0; color: var(--muted); }
+  .cat { justify-self: start; padding: 1px 8px; border: 2px solid var(--fg); font: 600 0.8125rem/1.6 var(--font); letter-spacing: 0.06em; white-space: nowrap; }
+  .cat.night { background: var(--fg); color: var(--bg); }
+  .item .cat { display: inline-block; margin-top: 6px; }
+  @media (max-width: 480px) { .cats div { grid-template-columns: 1fr; } }
   .links { margin-top: 6px; font: 500 0.875rem/1.6 var(--font); display: flex; flex-wrap: wrap; gap: 4px 16px; }
 
   dl.skills { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 10px 16px; margin: 0; }
@@ -233,6 +241,8 @@
     section { padding-block: 10pt; gap: 8pt 16pt; grid-template-columns: 96pt minmax(0, 1fr); border-top-width: 1pt; }
     .items { gap: 10pt; }
     .item { break-inside: avoid; }
+    .cats { display: none; }
+    .cat, .cat.night { border: 0; padding: 0; background: none; color: #000; }
     .item h3 { font-size: 10.5pt; }
     .item h3 a::after { content: ""; }
     .item p, .item ul { max-width: none; }
@@ -277,15 +287,27 @@
     </ul>
   </header>
 
-  <!-- Proyectos: solo se listan los que llevan el prefijo "sideproject" en el nombre. -->
+  <!-- Proyectos: solo se listan repositorios con prefijo "DevSandbox-" (pequeños) o "NightBuilds-" (grandes).
+       Antes el prefijo era "sideproject-". Solo proyectos terminados o en curso real, nunca los que están sin empezar. -->
   <section id="proyectos">
     <h2><span lang="es">Proyectos</span><span lang="en">Projects</span></h2>
     <div class="items">
+      <dl class="cats">
+        <div>
+          <dt><span class="cat">DevSandbox</span></dt>
+          <dd><span lang="es">Proyecto pequeño, de hasta 8 horas: un espacio para practicar un tema concreto y terminarlo rápido.</span><span lang="en">Small project, up to 8 hours: a space to practise one specific topic and finish it quickly.</span></dd>
+        </div>
+        <div>
+          <dt><span class="cat night">NightBuilds</span></dt>
+          <dd><span lang="es">Proyecto grande, de 8 horas o más: varias piezas (base de datos, orquestación, nube o API) y decisiones de diseño propias.</span><span lang="en">Larger project, 8 hours or more: several moving parts (database, orchestration, cloud or API) and my own design decisions.</span></dd>
+        </div>
+      </dl>
       <article class="item">
         <div class="head">
           <h3><span lang="es">Terrazas de Madrid: de MongoDB a Neo4j</span><span lang="en">Madrid terraces: from MongoDB to Neo4j</span></h3>
           <span class="meta"><span lang="es">trabajo en equipo · repo privado</span><span lang="en">team project · private repo</span></span>
         </div>
+        <span class="cat night">NightBuilds</span>
         <p class="sub"><span lang="es">Investigación y ejercicio práctico tipo prueba técnica · oct 2026</span><span lang="en">Research and hands-on exercise in the style of a technical test · Oct 2026</span></p>
         <ul lang="es">
           <li>Importación de datos abiertos de locales y terrazas de Madrid a MongoDB Atlas, con monitorización del replica set mediante <code>mongostat</code> y <code>mongotop</code>.</li>
