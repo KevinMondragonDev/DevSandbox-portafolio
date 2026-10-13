@@ -18,7 +18,7 @@ Este es un **DevSandbox**: un solo archivo `index.html`, sin compilación ni ser
 ## De qué va
 
 - **CV** con experiencia, habilidades y educación; se guarda como PDF desde el botón de la página.
-- **Proyectos:** solo los repositorios con prefijo `DevSandbox-` o `NightBuilds-`, cada uno con su categoría, y solo los terminados o en curso.
+- **Proyectos:** solo los repositorios con prefijo `DevSandbox-` o `NightBuilds-`, cada uno con su categoría. Los que aún no empiezo aparecen aparte, en gris, bajo «Próximamente».
 - **Formación continua:** calendario de cursos y certificaciones.
 
 Todo lo que aparece es información real y medida.
